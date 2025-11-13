@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">النظام الانتخابي الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="theme-color" content="#1a237e">
+    <meta name="description" content="النظام الانتخابي الذكي - نظام تصويت إلكتروني آمن">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗳️</text></svg>">
     <style>
         :root {
             --primary: #1a237e;
@@ -746,7 +749,7 @@
             border: 1px solid #ccc;
             text-align: center;
             font-size: 1rem;
-            color: black; /* ليكون واضحاً داخل لوحة التحكم */
+            color: black;
         }
         
         .update-votes-btn {
@@ -1046,7 +1049,6 @@
                 <div id="basic-tab" class="tab-content active">
                     <h3><i class="fas fa-info-circle"></i> إعدادات النظام</h3>
                     
-                    <!-- إضافة حقل جديد لشريط العنوان -->
                     <div class="form-group">
                         <label for="pageTitleInput"><i class="fas fa-heading"></i> شريط عنوان المتصفح</label>
                         <input type="text" id="pageTitleInput" class="form-control" value="النظام الانتخابي الذكي">
@@ -1269,7 +1271,7 @@
     const VOTED_KEY = 'userVoted';
     const ADMIN_PASS_1 = 'adminPass1';
     const ADMIN_PASS_2 = 'adminPass2';
-    const PAGE_TITLE_KEY = 'pageTitle'; // مفتاح جديد لتخزين شريط العنوان
+    const PAGE_TITLE_KEY = 'pageTitle';
 
     // --- تحميل البيانات من localStorage أو استخدام الافتراضيات ---
     let candidates = JSON.parse(localStorage.getItem(CANDIDATES_KEY)) || [
@@ -1281,11 +1283,11 @@
     let votingEndTime = localStorage.getItem(END_TIME_KEY) ? new Date(localStorage.getItem(END_TIME_KEY)) : new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
     let hasVoted = localStorage.getItem(VOTED_KEY) === 'true';
     let systemTitle = localStorage.getItem('systemTitle') || "النظام الانتخابي الذكي";
-    let pageTitle = localStorage.getItem(PAGE_TITLE_KEY) || "النظام الانتخابي الذكي"; // قيمة افتراضية لشريط العنوان
+    let pageTitle = localStorage.getItem(PAGE_TITLE_KEY) || "النظام الانتخابي الذكي";
     let firstPassword = localStorage.getItem(ADMIN_PASS_1) || "admin123";
     let secondPassword = localStorage.getItem(ADMIN_PASS_2) || "secure456";
     let FINGERPRINT_CODE = "";
-    let isVotingOpen = true; // يتم تحديثها بناءً على الوقت
+    let isVotingOpen = true;
 
     // --- وظائف المساعدة العامة ---
 
@@ -1303,9 +1305,6 @@
         }, 3500);
     }
     
-    /**
-     * وظيفة جديدة ومُصححة: لتشغيل أزرار المشاركة الاجتماعية
-     */
     function shareOnSocial(platform) {
         const url = encodeURIComponent(window.location.href);
         const text = encodeURIComponent(document.title + " - شارك في الانتخابات الإلكترونية الآن!");
@@ -1455,10 +1454,8 @@
             return;
         }
         
-        // **ملاحظة:** التعامل مع File Input يقتصر على عرض الصورة محلياً ولا يمكن حفظها على السيرفر (Github Pages)
         const fileInput = document.getElementById('newCandidateImageFile');
         if (fileInput.files.length > 0) {
-            // هنا يجب أن يتم تحميل الصورة إلى سيرفر، لكن في هذا المثال نستخدم رابط افتراضي
             showNotification("تمت إضافة المرشح بنجاح! (الصورة المحملة لن تُحفظ بشكل دائم في هذا العرض)", 'warning');
         }
 
@@ -1477,7 +1474,6 @@
         renderDashboardStats();
         showNotification(`تمت إضافة المرشح: ${name}`, 'success');
 
-        // مسح الحقول
         document.getElementById('newCandidateName').value = '';
         document.getElementById('newCandidateParty').value = '';
         document.getElementById('newCandidateImageURL').value = '';
@@ -1488,7 +1484,7 @@
         const list = document.getElementById('dashboardCandidatesList');
         list.innerHTML = '';
 
-        candidates.sort((a, b) => b.votes - a.votes); // فرز حسب الأصوات
+        candidates.sort((a, b) => b.votes - a.votes);
         
         if (candidates.length === 0) {
             list.innerHTML = '<div class="alert alert-warning"><i class="fas fa-info-circle"></i> لا يوجد مرشحون حالياً.</div>';
@@ -1534,7 +1530,6 @@
     }
 
     function editCandidate(id) {
-        // هذه وظيفة وهمية (Mock) بسيطة للتعديل
         const candidate = candidates.find(c => c.id === id);
         if (!candidate) return;
 
@@ -1667,7 +1662,7 @@
     function updateMainStats() {
         const totalVotes = candidates.reduce((sum, c) => sum + c.votes, 0);
         const leader = candidates.reduce((max, c) => (c.votes > max.votes ? c : max), { votes: -1, name: '--' });
-        const participation = candidates.length > 0 ? (totalVotes * 100 / (candidates.length * 1000)).toFixed(2) : 0; // افتراض إجمالي الناخبين 1000 لكل مرشح كـ Demo
+        const participation = candidates.length > 0 ? (totalVotes * 100 / (candidates.length * 1000)).toFixed(2) : 0;
 
         document.getElementById('mainTitle').innerHTML = `<i class="fas fa-shield-alt"></i> ${systemTitle} <i class="fas fa-poll"></i>`;
         
@@ -1676,7 +1671,6 @@
         document.getElementById('mainStatLeader').textContent = leader.name;
         document.getElementById('mainStatParticipation').textContent = `${participation}%`;
 
-        // تحديث العداد التنازلي
         const now = new Date();
         const diff = votingEndTime.getTime() - now.getTime();
         const timerDisplay = document.getElementById('mainTimerDisplay');
@@ -1715,9 +1709,6 @@
         }
     }
 
-    /**
-     * وظيفة مُحدَّثة: تحديث عنوان النظام وشريط العنوان في تبويب المتصفح
-     */
     function updateSystemTitle() {
         const newTitle = document.getElementById('systemTitle').value;
         const newPageTitle = document.getElementById('pageTitleInput').value;
@@ -1733,10 +1724,8 @@
         localStorage.setItem('systemTitle', systemTitle);
         localStorage.setItem(PAGE_TITLE_KEY, pageTitle);
         
-        // تحديث شريط عنوان المتصفح
         document.title = pageTitle;
         
-        // تحديث الواجهة الرئيسية
         updateMainStats();
         
         showNotification("تم تحديث عنوان النظام وشريط العنوان بنجاح.", 'success');
@@ -1763,7 +1752,6 @@
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
         document.getElementById('currentEndTime').textContent = votingEndTime.toLocaleString('ar-EG', options);
 
-        // التحديث المستمر للوقت المتبقي في لوحة التحكم
         const now = new Date();
         const diff = votingEndTime.getTime() - now.getTime();
         const timeRemainingElement = document.getElementById('timeRemaining');
@@ -1783,7 +1771,7 @@
 
     function extendVotingTime(hours) {
         if (!isVotingOpen) {
-            votingEndTime = new Date(); // ابدأ من الآن إذا كان مغلقاً
+            votingEndTime = new Date();
         }
         votingEndTime.setTime(votingEndTime.getTime() + (hours * 60 * 60 * 1000));
         localStorage.setItem(END_TIME_KEY, votingEndTime.toISOString());
@@ -1822,7 +1810,7 @@
     }
     
     function lockVoting() {
-        votingEndTime = new Date(new Date().getTime() - 1000); // تعيين الوقت إلى الماضي
+        votingEndTime = new Date(new Date().getTime() - 1000);
         localStorage.setItem(END_TIME_KEY, votingEndTime.toISOString());
         isVotingOpen = false;
         updateVotingTimeDisplay();
@@ -1832,7 +1820,7 @@
     }
 
     function unlockVoting() {
-        votingEndTime = new Date(new Date().getTime() + (1 * 60 * 60 * 1000)); // ساعة من الآن
+        votingEndTime = new Date(new Date().getTime() + (1 * 60 * 60 * 1000));
         localStorage.setItem(END_TIME_KEY, votingEndTime.toISOString());
         isVotingOpen = true;
         updateVotingTimeDisplay();
@@ -1885,10 +1873,8 @@
     
     // --- وظيفة التهيئة الرئيسية ---
     function initApp() {
-        // تعيين شريط العنوان من القيمة المحفوظة
         document.title = pageTitle;
         
-        // تعيين القيم في حقول الإدخال في لوحة التحكم
         document.getElementById('systemTitle').value = systemTitle;
         document.getElementById('pageTitleInput').value = pageTitle;
         
@@ -1896,23 +1882,20 @@
         renderCandidates();
         updateMainStats();
         
-        // تحديث كل 1 ثانية
         setInterval(() => {
             updateMainStats();
             updateVotingTimeDisplay();
-        }, 1000); 
+        }, 1000);
 
-        // إنشاء الجسيمات
         for (let i = 0; i < 20; i++) {
             createParticle();
         }
         
-        // تحديث إحصائيات لوحة التحكم كل 5 ثوانٍ إذا كانت مفتوحة
         setInterval(() => {
             if (document.getElementById('dashboard').style.display === 'block') {
                 renderDashboardStats();
             }
-        }, 5000); 
+        }, 5000);
     }
 
     document.addEventListener('DOMContentLoaded', initApp);
