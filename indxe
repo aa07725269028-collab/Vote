@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
-<script src="firebase.js"></script>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النظام الانتخابي الذكي</title>
+    <title id="pageTitle">النظام الانتخابي الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -1049,8 +1046,15 @@
                 <div id="basic-tab" class="tab-content active">
                     <h3><i class="fas fa-info-circle"></i> إعدادات النظام</h3>
                     
+                    <!-- إضافة حقل جديد لشريط العنوان -->
                     <div class="form-group">
-                        <label for="systemTitle"><i class="fas fa-heading"></i> عنوان النظام</label>
+                        <label for="pageTitleInput"><i class="fas fa-heading"></i> شريط عنوان المتصفح</label>
+                        <input type="text" id="pageTitleInput" class="form-control" value="النظام الانتخابي الذكي">
+                        <small style="color: #ccc; font-size: 0.8rem;">هذا هو النص الذي يظهر في شريط عنوان المتصفح</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="systemTitle"><i class="fas fa-heading"></i> عنوان النظام (في الصفحة)</label>
                         <input type="text" id="systemTitle" class="form-control" value="النظام الانتخابي الذكي">
                     </div>
                     
@@ -1265,6 +1269,7 @@
     const VOTED_KEY = 'userVoted';
     const ADMIN_PASS_1 = 'adminPass1';
     const ADMIN_PASS_2 = 'adminPass2';
+    const PAGE_TITLE_KEY = 'pageTitle'; // مفتاح جديد لتخزين شريط العنوان
 
     // --- تحميل البيانات من localStorage أو استخدام الافتراضيات ---
     let candidates = JSON.parse(localStorage.getItem(CANDIDATES_KEY)) || [
@@ -1276,6 +1281,7 @@
     let votingEndTime = localStorage.getItem(END_TIME_KEY) ? new Date(localStorage.getItem(END_TIME_KEY)) : new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
     let hasVoted = localStorage.getItem(VOTED_KEY) === 'true';
     let systemTitle = localStorage.getItem('systemTitle') || "النظام الانتخابي الذكي";
+    let pageTitle = localStorage.getItem(PAGE_TITLE_KEY) || "النظام الانتخابي الذكي"; // قيمة افتراضية لشريط العنوان
     let firstPassword = localStorage.getItem(ADMIN_PASS_1) || "admin123";
     let secondPassword = localStorage.getItem(ADMIN_PASS_2) || "secure456";
     let FINGERPRINT_CODE = "";
@@ -1664,8 +1670,6 @@
         const participation = candidates.length > 0 ? (totalVotes * 100 / (candidates.length * 1000)).toFixed(2) : 0; // افتراض إجمالي الناخبين 1000 لكل مرشح كـ Demo
 
         document.getElementById('mainTitle').innerHTML = `<i class="fas fa-shield-alt"></i> ${systemTitle} <i class="fas fa-poll"></i>`;
-        document.title = systemTitle; // تصحيح: تحديث شريط العنوان هنا أيضاً
-        document.getElementById('systemTitle').value = systemTitle;
         
         document.getElementById('mainStatCandidates').textContent = candidates.length;
         document.getElementById('mainStatTotalVotes').textContent = totalVotes;
@@ -1712,19 +1716,30 @@
     }
 
     /**
-     * وظيفة مُصححة: تحديث شريط العنوان في تبويب المتصفح
+     * وظيفة مُحدَّثة: تحديث عنوان النظام وشريط العنوان في تبويب المتصفح
      */
     function updateSystemTitle() {
         const newTitle = document.getElementById('systemTitle').value;
-        if (newTitle.trim() === "") {
+        const newPageTitle = document.getElementById('pageTitleInput').value;
+        
+        if (newTitle.trim() === "" || newPageTitle.trim() === "") {
             showNotification("لا يمكن أن يكون العنوان فارغاً.", 'danger');
             return;
         }
+        
         systemTitle = newTitle.trim();
+        pageTitle = newPageTitle.trim();
+        
         localStorage.setItem('systemTitle', systemTitle);
-        document.title = systemTitle; // <--- السطر الإضافي لتبويب المتصفح
-        updateMainStats(); // لتحديث العنوان في الواجهة الرئيسية
-        showNotification("تم تحديث عنوان النظام بنجاح.", 'success');
+        localStorage.setItem(PAGE_TITLE_KEY, pageTitle);
+        
+        // تحديث شريط عنوان المتصفح
+        document.title = pageTitle;
+        
+        // تحديث الواجهة الرئيسية
+        updateMainStats();
+        
+        showNotification("تم تحديث عنوان النظام وشريط العنوان بنجاح.", 'success');
     }
 
     function renderDashboardStats() {
@@ -1870,6 +1885,13 @@
     
     // --- وظيفة التهيئة الرئيسية ---
     function initApp() {
+        // تعيين شريط العنوان من القيمة المحفوظة
+        document.title = pageTitle;
+        
+        // تعيين القيم في حقول الإدخال في لوحة التحكم
+        document.getElementById('systemTitle').value = systemTitle;
+        document.getElementById('pageTitleInput').value = pageTitle;
+        
         document.getElementById('mainContent').style.display = 'block'; 
         renderCandidates();
         updateMainStats();
@@ -1893,30 +1915,7 @@
         }, 5000); 
     }
 
-    document.addEventListener('DOMContentLoaded', initApp); 
-// في ملف firebase.js
-import { initializeApp } from 'firebase/app';
-import { getDatabase } from 'firebase/database';
-
-const firebaseConfig = {
-  apiKey: "API_KEY_HERE",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-
-export { database };
-
-// في ملف index.html
-<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
-<script src="firebase.js"></script>
+    document.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>
