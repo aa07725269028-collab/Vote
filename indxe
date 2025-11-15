@@ -35,9 +35,75 @@
             overflow-x: hidden;
         }
         
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .security-badge {
+            background: rgba(0, 200, 83, 0.3);
+            border: 1px solid var(--secondary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .security-badge.warning {
+            background: rgba(255, 152, 0, 0.3);
+            border-color: var(--warning);
+        }
+        
+        .security-badge.danger {
+            background: rgba(255, 23, 68, 0.3);
+            border-color: var(--danger);
+        }
+        
+        .security-badge.gold {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: var(--gold);
         }
         
         .main-header {
@@ -48,7 +114,38 @@
             margin-bottom: 25px;
             text-align: center;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: glow 3s infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 20px rgba(0, 200, 83, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(33, 150, 243, 0.5);
+            }
+        }
+        
+        .header-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary), var(--info), var(--purple), var(--gold));
+            animation: gradientShift 5s infinite alternate;
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
         }
         
         .main-header h1 {
@@ -58,6 +155,29 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, var(--secondary), var(--info));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 2s infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(0, 200, 83, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(33, 150, 243, 0.8);
+            }
+        }
+        
+        .main-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .stats-grid {
@@ -80,8 +200,26 @@
             padding: 25px;
             text-align: center;
             transition: all 0.4s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:before, .candidate-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary), var(--info));
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
         }
         
         .candidate-card {
@@ -90,6 +228,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-between;
         }
         
         .candidate-image {
@@ -99,6 +238,20 @@
             object-fit: cover;
             border: 5px solid var(--secondary);
             margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.4s ease;
+        }
+        
+        .candidate-card:hover .candidate-image {
+            transform: scale(1.1);
+            border-color: var(--info);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .candidate-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
         }
         
         .vote-btn {
@@ -113,11 +266,89 @@
             width: 100%;
             font-weight: bold;
             transition: all 0.4s;
+            box-shadow: 0 6px 15px rgba(0, 200, 83, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vote-btn:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .vote-btn:hover:not(:disabled):after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .vote-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 200, 83, 0.4);
         }
         
         .vote-btn:disabled {
             background: #bdbdbd;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .security-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 25px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .security-panel:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary), var(--info));
+        }
+        
+        .security-panel h3 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+        
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--secondary);
+            text-shadow: 0 0 10px rgba(0, 200, 83, 0.5);
         }
         
         .admin-access {
@@ -135,8 +366,36 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
+            box-shadow: 0 6px 15px rgba(126, 87, 194, 0.4);
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
         }
         
+        .admin-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .admin-btn:hover:before {
+            left: 100%;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(126, 87, 194, 0.6);
+        }
+        
+        /* أنماط لوحة التحكم */
         .login-container {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -167,6 +426,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .dashboard-content {
@@ -180,6 +440,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         
         .form-group {
@@ -195,6 +456,7 @@
             background: rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 1rem;
+            transition: all 0.3s;
         }
         
         .btn {
@@ -216,6 +478,31 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--secondary), #00e676);
             color: white;
+            box-shadow: 0 4px 8px rgba(0, 200, 83, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #ff5252);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 23, 68, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #ffb74d);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, var(--info), #64b5f6);
+            color: white;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #66bb6a);
+            color: white;
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
         }
         
         .tabs {
@@ -261,6 +548,349 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             z-index: 1000;
             font-weight: bold;
+            animation: fadeIn 0.5s, fadeOut 0.5s 2.5s forwards;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* أنماط إدارة المرشحين */
+        .candidate-management {
+            margin-top: 20px;
+        }
+        
+        .candidate-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .candidate-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .candidate-item-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .candidate-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+            flex-shrink: 0;
+        }
+        
+        .candidate-details {
+            flex: 1;
+        }
+        
+        .candidate-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            width: auto;
+        }
+        
+        .image-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .image-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0 auto;
+        }
+        
+        .time-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .time-display {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .time-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 5px 0;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--secondary);
+        }
+        
+        /* أنماط جديدة */
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+        
+        .social-btn.facebook {
+            background: #3b5998;
+        }
+        
+        .social-btn.twitter {
+            background: #1da1f2;
+        }
+        
+        .social-btn.whatsapp {
+            background: #25d366;
+        }
+        
+        .social-btn.telegram {
+            background: #0088cc;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+        
+        .votes-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .vote-input {
+            width: 100px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 1rem;
+            color: black;
+        }
+        
+        .update-votes-btn {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .password-level {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        /* أنماط جديدة لتغيير كلمة المرور */
+        .password-change-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .password-strength {
+            height: 5px;
+            border-radius: 3px;
+            margin: 5px 0;
+            transition: all 0.3s;
+            width: 0%;
+            background: transparent;
+        }
+
+        .strength-weak { background: var(--danger); width: 30%; }
+        .strength-medium { background: var(--warning); width: 60%; }
+        .strength-strong { background: var(--success); width: 100%; }
+
+        /* أنماط رفع الصور من الموبايل */
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-label:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--secondary);
+        }
+
+        .file-label i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        /* زر الحفظ الجديد */
+        .save-settings-btn {
+            background: linear-gradient(135deg, var(--success), #66bb6a);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .save-settings-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.6);
+        }
+        
+        /* تحسينات للجوال */
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 1.8rem;
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .candidate-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .candidate-item-content {
+                flex-direction: column;
+            }
+            
+            .candidate-actions {
+                justify-content: center;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                min-width: auto;
+            }
+            
+            .time-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .votes-control {
+                flex-direction: column;
+            }
+            
+            .social-share {
+                gap: 10px;
+            }
+            
+            .social-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
         }
         
         @media (min-width: 768px) {
@@ -273,6 +903,17 @@
             .dashboard-content {
                 grid-template-columns: 2fr 1fr;
             }
+            .time-controls {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .stats-panel {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .candidate-item {
+                flex-direction: row;
+                align-items: center;
+            }
         }
         
         @media (min-width: 1024px) {
@@ -280,32 +921,106 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .alert-success {
+            background: rgba(76, 175, 80, 0.3);
+            border: 1px solid var(--success);
+            color: #c8e6c9;
+        }
+        
+        .alert-danger {
+            background: rgba(255, 23, 68, 0.3);
+            border: 1px solid var(--danger);
+            color: #ffcdd2;
+        }
+        
+        .sync-indicator {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(0, 200, 83, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
-    <div class="login-container" id="firstLoginContainer" style="display: none;">
+    <div class="floating-particles" id="particlesContainer"></div>
+    
+    <!-- مؤشر التزامن -->
+    <div class="sync-indicator" id="syncIndicator">
+        <i class="fas fa-sync-alt"></i>
+        <span>جاري المزامنة...</span>
+    </div>
+    
+    <div class="login-container fade-in" id="firstLoginContainer" style="display: none;">
         <h1><i class="fas fa-shield-alt"></i> التحقق الأولي</h1>
+        <p>المرحلة الأولى من التحقق الأمني</p>
+        
+        <div class="security-badge">
+            <i class="fas fa-fingerprint"></i> نظام أمان متقدم
+        </div>
+        
         <form id="firstLoginForm">
             <div class="form-group">
-                <label for="firstPassword">كلمة المرور الأولى</label>
+                <label for="firstPassword"><i class="fas fa-key"></i> كلمة المرور الأولى</label>
                 <input type="password" id="firstPassword" class="form-control" placeholder="أدخل كلمة المرور الأولى" required>
             </div>
-            <button type="submit" class="btn btn-primary">متابعة إلى المرحلة الثانية</button>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> متابعة إلى المرحلة الثانية
+            </button>
         </form>
+        
         <div id="firstLoginMessage"></div>
     </div>
     
-    <div class="login-container" id="secondLoginContainer" style="display: none;">
+    <div class="login-container fade-in" id="secondLoginContainer" style="display: none;">
         <h1><i class="fas fa-user-shield"></i> التحقق النهائي</h1>
+        <p>المرحلة الثانية من التحقق الأمني</p>
+        
+        <div class="security-badge gold">
+            <i class="fas fa-lock"></i> مستوى أمان عالي
+        </div>
+        
         <form id="secondLoginForm">
             <div class="form-group">
-                <label for="secondPassword">كلمة المرور الثانية</label>
+                <label for="secondPassword"><i class="fas fa-key"></i> كلمة المرور الثانية</label>
                 <input type="password" id="secondPassword" class="form-control" placeholder="أدخل كلمة المرور الثانية" required>
             </div>
-            <button type="submit" class="btn btn-primary">تسجيل الدخول النهائي</button>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول النهائي
+            </button>
         </form>
+        
         <div id="secondLoginMessage"></div>
-        <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px;">
+        
+        <div class="password-level">
+            <p><i class="fas fa-info-circle"></i> معلومات الأمان (Demo):</p>
             <p>كلمة المرور الأولى: <strong>admin123</strong></p>
             <p>كلمة المرور الثانية: <strong>secure456</strong></p>
         </div>
@@ -315,8 +1030,11 @@
         <div class="dashboard-header">
             <div class="dashboard-title">
                 <h1><i class="fas fa-cogs"></i> لوحة التحكم</h1>
+                <div class="security-badge">
+                    <i class="fas fa-user-shield"></i> مسؤول النظام
+                </div>
             </div>
-            <button class="btn btn-primary" onclick="logout()">
+            <button class="btn btn-danger btn-sm" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
             </button>
         </div>
@@ -324,121 +1042,192 @@
         <div class="dashboard-content">
             <div class="control-panel">
                 <div class="tabs">
-                    <div class="tab active" onclick="switchTab('basic')">الإعدادات الأساسية</div>
-                    <div class="tab" onclick="switchTab('candidates')">إدارة المرشحين</div>
-                    <div class="tab" onclick="switchTab('time')">إدارة الوقت</div>
+                    <div class="tab active" onclick="switchTab('basic')"><i class="fas fa-edit"></i> الإعدادات الأساسية</div>
+                    <div class="tab" onclick="switchTab('candidates')"><i class="fas fa-users"></i> إدارة المرشحين</div>
+                    <div class="tab" onclick="switchTab('time')"><i class="fas fa-clock"></i> إدارة الوقت</div>
+                    <div class="tab" onclick="switchTab('tools')"><i class="fas fa-chart-bar"></i> أدوات متقدمة</div>
                 </div>
                 
                 <div id="basic-tab" class="tab-content active">
-                    <h3>إعدادات النظام</h3>
+                    <h3><i class="fas fa-info-circle"></i> إعدادات النظام</h3>
+                    
                     <div class="form-group">
-                        <label for="systemTitle">عنوان النظام</label>
+                        <label for="systemTitle"><i class="fas fa-heading"></i> عنوان النظام</label>
                         <input type="text" id="systemTitle" class="form-control" value="النظام الانتخابي الذكي">
                     </div>
-                    <button class="btn btn-primary" onclick="updateSystemTitle()">
-                        حفظ العنوان وتحديث شريط المتصفح
+                    
+                    <button class="btn btn-primary btn-block" onclick="updateSystemTitle()">
+                        <i class="fas fa-save"></i> حفظ العنوان وتحديث شريط المتصفح
                     </button>
                     
-                    <h3 style="margin-top: 30px;">إحصائيات سريعة</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                    <div id="titleMessage" style="margin-top: 10px;"></div>
+                    
+                    <h3 style="margin-top: 30px;"><i class="fas fa-chart-pie"></i> إحصائيات سريعة</h3>
+                    
+                    <div class="stats-panel">
                         <div class="stat-card">
+                            <i class="fas fa-users"></i>
                             <p>عدد المرشحين</p>
-                            <h2 id="dashboardStatCandidates">0</h2>
+                            <div class="stat-value" id="dashboardStatCandidates">0</div>
                         </div>
                         <div class="stat-card">
+                            <i class="fas fa-vote-yea"></i>
                             <p>إجمالي الأصوات</p>
-                            <h2 id="dashboardStatTotalVotes">0</h2>
+                            <div class="stat-value" id="dashboardStatTotalVotes">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <p>حالة التصويت</p>
+                            <div class="stat-value" id="dashboardStatStatus">مغلق</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-trophy"></i>
+                            <p>المرشح الرائد</p>
+                            <div class="stat-value" id="dashboardStatLeader">--</div>
                         </div>
                     </div>
                 </div>
 
                 <div id="candidates-tab" class="tab-content">
-                    <h3>إضافة مرشح جديد</h3>
-                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                    <h3><i class="fas fa-user-plus"></i> إضافة مرشح جديد</h3>
+                    <div class="candidate-form">
                         <div class="form-group">
                             <label for="newCandidateName">الاسم الكامل</label>
-                            <input type="text" id="newCandidateName" class="form-control" placeholder="اسم المرشح">
+                            <input type="text" id="newCandidateName" class="form-control" placeholder="اسم المرشح" required>
                         </div>
                         <div class="form-group">
                             <label for="newCandidateParty">الحزب/الكتلة</label>
-                            <input type="text" id="newCandidateParty" class="form-control" placeholder="اسم الحزب">
+                            <input type="text" id="newCandidateParty" class="form-control" placeholder="اسم الحزب" required>
                         </div>
                         <div class="form-group">
                             <label for="newCandidateImage">رابط الصورة</label>
                             <input type="text" id="newCandidateImage" class="form-control" placeholder="رابط الصورة" value="https://via.placeholder.com/140/CCCCCC/000000?text=NEW">
                         </div>
                         <button class="btn btn-primary" onclick="addCandidate()">
-                            إضافة المرشح
+                            <i class="fas fa-user-plus"></i> إضافة المرشح
                         </button>
                     </div>
 
-                    <h3>قائمة المرشحين الحاليين</h3>
-                    <div id="dashboardCandidatesList"></div>
+                    <h3 style="margin-top: 30px;"><i class="fas fa-list-ul"></i> قائمة المرشحين الحاليين</h3>
+                    <div id="dashboardCandidatesList">
+                        <!-- سيتم ملؤها ديناميكياً -->
+                    </div>
                 </div>
 
                 <div id="time-tab" class="tab-content">
-                    <h3>إعدادات الوقت</h3>
-                    <div class="form-group">
-                        <label for="newEndTimeInput">تعيين وقت وتاريخ انتهاء التصويت</label>
-                        <input type="datetime-local" id="newEndTimeInput" class="form-control" style="color: black;">
-                        <button class="btn btn-primary" onclick="setSpecificEndTime()">تعيين الوقت</button>
-                    </div>
+                    <h3><i class="fas fa-clock"></i> إدارة وقت التصويت</h3>
                     
-                    <div style="margin-top: 20px;">
-                        <button class="btn btn-primary" onclick="extendVotingTime(1)" style="margin: 5px;">+1 ساعة</button>
-                        <button class="btn btn-primary" onclick="extendVotingTime(6)" style="margin: 5px;">+6 ساعات</button>
-                        <button class="btn btn-primary" onclick="extendVotingTime(24)" style="margin: 5px;">+1 يوم</button>
-                    </div>
-                    
-                    <div style="background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <div class="time-display">
                         <div>وقت انتهاء التصويت الحالي:</div>
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--secondary);" id="currentEndTime">--</div>
+                        <div class="time-value" id="currentEndTime">--</div>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="newEndTimeInput"><i class="fas fa-calendar-alt"></i> تعيين وقت وتاريخ محدد</label>
+                        <input type="datetime-local" id="newEndTimeInput" class="form-control" style="color: black;">
+                        <button class="btn btn-success" onclick="setSpecificEndTime()"><i class="fas fa-calendar-check"></i> تعيين الوقت</button>
+                    </div>
+                    
+                    <div class="time-controls">
+                        <button class="btn btn-info btn-sm" onclick="extendVotingTime(1)"><i class="fas fa-plus"></i> +1 ساعة</button>
+                        <button class="btn btn-info btn-sm" onclick="extendVotingTime(6)"><i class="fas fa-plus"></i> +6 ساعات</button>
+                        <button class="btn btn-info btn-sm" onclick="extendVotingTime(24)"><i class="fas fa-plus"></i> +1 يوم</button>
+                        <button class="btn btn-warning btn-sm" onclick="resetVotingTime()"><i class="fas fa-redo"></i> إعادة التعيين</button>
+                    </div>
+                </div>
+
+                <div id="tools-tab" class="tab-content">
+                    <h3><i class="fas fa-wrench"></i> أدوات النظام المتقدمة</h3>
+                    
+                    <div class="quick-actions">
+                        <button class="btn btn-danger" onclick="resetAllVotes()"><i class="fas fa-eraser"></i> تصفير جميع الأصوات</button>
+                        <button class="btn btn-warning" onclick="lockVoting()"><i class="fas fa-lock"></i> إيقاف التصويت</button>
+                        <button class="btn btn-success" onclick="unlockVoting()"><i class="fas fa-unlock"></i> تفعيل التصويت</button>
+                        <button class="btn btn-info" onclick="exportData()"><i class="fas fa-file-export"></i> تصدير البيانات</button>
+                    </div>
+                    
+                    <h3 style="margin-top: 30px;"><i class="fas fa-share-alt"></i> مشاركة النظام</h3>
+                    <p>روابط لمشاركة رابط النظام على منصات التواصل الاجتماعي.</p>
+                    <div class="social-share">
+                        <a href="javascript:void(0);" onclick="shareOnSocial('facebook')" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="javascript:void(0);" onclick="shareOnSocial('twitter')" class="social-btn twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="javascript:void(0);" onclick="shareOnSocial('whatsapp')" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="javascript:void(0);" onclick="shareOnSocial('telegram')" class="social-btn telegram"><i class="fab fa-telegram-plane"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <h3><i class="fas fa-sync-alt"></i> حالة التزامن</h3>
+                <div style="background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 10px;">
+                    <p>آخر تحديث: <span id="lastUpdateTime">--</span></p>
+                    <p>عدد التحديثات: <span id="updateCount">0</span></p>
+                    <button class="btn btn-info btn-sm" onclick="forceSync()">
+                        <i class="fas fa-sync"></i> تحديث يدوي
+                    </button>
+                </div>
+                
+                <h3 style="margin-top: 20px;"><i class="fas fa-info-circle"></i> تعليمات التزامن</h3>
+                <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; font-size: 0.9rem;">
+                    <p>• النظام يقوم بالتحديث التلقائي كل 3 ثوانٍ</p>
+                    <p>• أي تغيير يتم حفظه فوراً ومشاركته</p>
+                    <p>• افتح النظام في多个 نوافذ لتجربة التزامن</p>
                 </div>
             </div>
         </div>
     </div>
     
     <div class="container" id="mainContent">
-        <header class="main-header">
-            <h1 id="mainTitle"><i class="fas fa-shield-alt"></i> النظام الانتخابي الذكي</h1>
-            <p>مرحباً بك في نظام التصويت الإلكتروني الأكثر أماناً وشفافية.</p>
+        <header class="main-header fade-in">
+            <div class="header-gradient"></div>
+            <h1 id="mainTitle"><i class="fas fa-shield-alt"></i> النظام الانتخابي الذكي <i class="fas fa-poll"></i></h1>
+            <p>مرحباً بك في نظام التصويت الإلكتروني الأكثر أماناً وشفافية. يرجى اختيار مرشحك بحرية ومسؤولية.</p>
             
-            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
+            <div id="votingStatusPanel" class="security-panel">
                 <h3><i class="fas fa-clock"></i> حالة التصويت</h3>
-                <div style="font-size: 1.2rem; font-weight: bold; color: var(--secondary);" id="mainTimerDisplay">جاري التحميل...</div>
+                <div class="timer" id="mainTimerDisplay">جاري التحميل...</div>
+                <div id="votingMessage"></div>
+            </div>
+            
+            <div class="social-share">
+                <a href="javascript:void(0);" onclick="shareOnSocial('facebook')" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="javascript:void(0);" onclick="shareOnSocial('twitter')" class="social-btn twitter"><i class="fab fa-twitter"></i></a>
+                <a href="javascript:void(0);" onclick="shareOnSocial('whatsapp')" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+                <a href="javascript:void(0);" onclick="shareOnSocial('telegram')" class="social-btn telegram"><i class="fab fa-telegram-plane"></i></a>
             </div>
         </header>
         
         <section class="stats-section">
-            <h2 style="text-align: center; margin-bottom: 20px;">نظرة عامة على النتائج</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;"><i class="fas fa-chart-pie"></i> نظرة عامة على النتائج</h2>
             <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-users" style="color: var(--info); font-size: 2rem; margin-bottom: 10px;"></i>
+                <div class="stat-card fade-in">
+                    <i class="fas fa-users" style="color: var(--info);"></i>
                     <p>إجمالي المرشحين</p>
-                    <h2 id="mainStatCandidates">0</h2>
+                    <h2 class="stat-value" id="mainStatCandidates">0</h2>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-vote-yea" style="color: var(--secondary); font-size: 2rem; margin-bottom: 10px;"></i>
+                <div class="stat-card fade-in">
+                    <i class="fas fa-vote-yea" style="color: var(--secondary);"></i>
                     <p>إجمالي الأصوات</p>
-                    <h2 id="mainStatTotalVotes">0</h2>
+                    <h2 class="stat-value" id="mainStatTotalVotes">0</h2>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-trophy" style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;"></i>
+                <div class="stat-card fade-in">
+                    <i class="fas fa-trophy" style="color: var(--gold);"></i>
                     <p>المرشح الرائد</p>
-                    <h2 id="mainStatLeader">--</h2>
+                    <h2 class="stat-value" id="mainStatLeader">--</h2>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-percent" style="color: var(--purple); font-size: 2rem; margin-bottom: 10px;"></i>
+                <div class="stat-card fade-in">
+                    <i class="fas fa-percent" style="color: var(--purple);"></i>
                     <p>نسبة المشاركة</p>
-                    <h2 id="mainStatParticipation">0%</h2>
+                    <h2 class="stat-value" id="mainStatParticipation">0%</h2>
                 </div>
             </div>
         </section>
         
         <section class="candidates-section">
-            <h2 style="text-align: center; margin-bottom: 20px;">قائمة المرشحين للتصويت</h2>
-            <div class="candidates-grid" id="candidatesGrid"></div>
+            <h2 style="text-align: center; margin-bottom: 20px;"><i class="fas fa-gavel"></i> قائمة المرشحين للتصويت</h2>
+            <div class="candidates-grid" id="candidatesGrid">
+                <!-- سيتم ملؤها ديناميكياً -->
+            </div>
         </section>
     </div>
     
@@ -460,24 +1249,87 @@
     let hasVoted = localStorage.getItem('userVoted') === 'true';
     let systemTitle = localStorage.getItem('systemTitle') || "النظام الانتخابي الذكي";
     let isVotingOpen = true;
+    let lastUpdateTime = Date.now();
+    let updateCount = 0;
 
-    // --- وظائف التخزين ---
-    function saveCandidates() {
+    // --- نظام التزامن البسيط والفعال ---
+    function saveAllData() {
         localStorage.setItem('electionCandidates', JSON.stringify(candidates));
-    }
-
-    function saveVotingTime() {
         localStorage.setItem('votingEndTime', votingEndTime.toISOString());
-    }
-
-    function saveSystemTitle() {
         localStorage.setItem('systemTitle', systemTitle);
+        localStorage.setItem('lastUpdate', Date.now().toString());
+        
+        updateSyncIndicator('تم الحفظ');
     }
 
-    // --- وظائف المساعدة ---
+    function loadAllData() {
+        const savedCandidates = localStorage.getItem('electionCandidates');
+        const savedTime = localStorage.getItem('votingEndTime');
+        const savedTitle = localStorage.getItem('systemTitle');
+        const savedLastUpdate = localStorage.getItem('lastUpdate');
+        
+        let dataChanged = false;
+
+        if (savedCandidates) {
+            const parsedCandidates = JSON.parse(savedCandidates);
+            if (JSON.stringify(parsedCandidates) !== JSON.stringify(candidates)) {
+                candidates = parsedCandidates;
+                dataChanged = true;
+            }
+        }
+
+        if (savedTime) {
+            const newTime = new Date(savedTime);
+            if (newTime.getTime() !== votingEndTime.getTime()) {
+                votingEndTime = newTime;
+                dataChanged = true;
+            }
+        }
+
+        if (savedTitle && savedTitle !== systemTitle) {
+            systemTitle = savedTitle;
+            dataChanged = true;
+        }
+
+        if (dataChanged) {
+            updateCount++;
+            renderCandidates();
+            updateMainStats();
+            updateDashboardStats();
+            updateVotingTimeDisplay();
+            updateSyncIndicator('تم التحديث');
+            
+            document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString('ar-EG');
+            document.getElementById('updateCount').textContent = updateCount;
+            
+            showNotification('تم تحديث البيانات تلقائياً');
+        }
+    }
+
+    function updateSyncIndicator(status) {
+        const indicator = document.getElementById('syncIndicator');
+        indicator.innerHTML = `<i class="fas fa-sync-alt"></i> <span>${status}</span>`;
+        
+        if (status === 'تم التحديث') {
+            indicator.style.background = 'rgba(0, 200, 83, 0.8)';
+            setTimeout(() => {
+                indicator.innerHTML = '<i class="fas fa-sync-alt"></i> <span>جاري المزامنة...</span>';
+                indicator.style.background = 'rgba(33, 150, 243, 0.8)';
+            }, 2000);
+        } else if (status === 'تم الحفظ') {
+            indicator.style.background = 'rgba(76, 175, 80, 0.8)';
+        }
+    }
+
+    function forceSync() {
+        loadAllData();
+        showNotification('تم التحديث يدوياً');
+    }
+
+    // --- وظائف المساعدة العامة ---
     function showNotification(message) {
         const notification = document.createElement('div');
-        notification.className = 'notification';
+        notification.className = 'notification fade-in';
         notification.innerHTML = `<i class="fas fa-bell"></i> ${message}`;
         document.body.appendChild(notification);
         setTimeout(() => {
@@ -485,40 +1337,73 @@
         }, 3000);
     }
 
-    // --- نظام تسجيل الدخول ---
+    function shareOnSocial(platform) {
+        const url = encodeURIComponent(window.location.href);
+        const text = encodeURIComponent(document.title + " - شارك في الانتخابات الإلكترونية الآن!");
+        let shareUrl = '';
+
+        switch (platform) {
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                break;
+            case 'twitter':
+                shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+                break;
+            case 'whatsapp':
+                shareUrl = `whatsapp://send?text=${text}%20${url}`;
+                break;
+            case 'telegram':
+                shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+                break;
+            default:
+                return;
+        }
+
+        window.open(shareUrl, 'ShareWindow', 'width=600,height=400');
+    }
+
+    // --- نظام الأمان وتسجيل الدخول ---
     document.getElementById('firstLoginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const password = document.getElementById('firstPassword').value;
-        
+        const messageElement = document.getElementById('firstLoginMessage');
+        messageElement.innerHTML = '';
+
         if (password === "admin123") {
             document.getElementById('firstLoginContainer').style.display = 'none';
             document.getElementById('secondLoginContainer').style.display = 'block';
+            showNotification("تم التحقق من المرحلة الأولى بنجاح!");
         } else {
-            document.getElementById('firstLoginMessage').innerHTML = '<div style="color: red; margin-top: 10px;">كلمة المرور الأولى غير صحيحة</div>';
+            messageElement.innerHTML = '<div class="alert alert-danger"><i class="fas fa-times-circle"></i> كلمة المرور الأولى غير صحيحة.</div>';
         }
     });
 
     document.getElementById('secondLoginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const password = document.getElementById('secondPassword').value;
-        
+        const messageElement = document.getElementById('secondLoginMessage');
+        messageElement.innerHTML = '';
+
         if (password === "secure456") {
             document.getElementById('secondLoginContainer').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             document.getElementById('adminAccessBtn').style.display = 'none';
             document.getElementById('mainContent').style.display = 'none';
-            showNotification("تم تسجيل الدخول بنجاح!");
+            showNotification("تم تسجيل الدخول بنجاح! مرحباً بالمسؤول.");
             renderDashboardCandidates();
             updateDashboardStats();
             updateVotingTimeDisplay();
         } else {
-            document.getElementById('secondLoginMessage').innerHTML = '<div style="color: red; margin-top: 10px;">كلمة المرور الثانية غير صحيحة</div>';
+            messageElement.innerHTML = '<div class="alert alert-danger"><i class="fas fa-times-circle"></i> كلمة المرور الثانية غير صحيحة.</div>';
         }
     });
 
     document.getElementById('adminAccessBtn').addEventListener('click', function() {
         document.getElementById('mainContent').style.display = 'none';
         document.getElementById('firstLoginContainer').style.display = 'block';
+        document.getElementById('firstPassword').value = '';
+        document.getElementById('firstLoginMessage').innerHTML = '';
+        document.getElementById('secondLoginContainer').style.display = 'none';
     });
 
     function logout() {
@@ -527,17 +1412,19 @@
         document.getElementById('secondLoginContainer').style.display = 'none';
         document.getElementById('adminAccessBtn').style.display = 'block';
         document.getElementById('mainContent').style.display = 'block';
-        showNotification("تم تسجيل الخروج بنجاح");
+        showNotification("تم تسجيل الخروج بنجاح.");
+        renderCandidates();
+        updateMainStats();
     }
 
     // --- إدارة المرشحين ---
     function addCandidate() {
         const name = document.getElementById('newCandidateName').value.trim();
         const party = document.getElementById('newCandidateParty').value.trim();
-        const imageUrl = document.getElementById('newCandidateImage').value.trim();
+        const imageUrl = document.getElementById('newCandidateImage').value.trim() || "https://via.placeholder.com/140/CCCCCC/000000?text=NEW";
 
         if (!name || !party) {
-            showNotification("يرجى إدخال اسم وحزب المرشح");
+            showNotification("يرجى إدخال اسم وحزب المرشح.");
             return;
         }
 
@@ -546,94 +1433,141 @@
             name: name,
             party: party,
             votes: 0,
-            imageUrl: imageUrl || "https://via.placeholder.com/140/CCCCCC/000000?text=NEW"
+            imageUrl: imageUrl
         };
 
         candidates.push(newCandidate);
-        saveCandidates();
+        saveAllData();
         renderCandidates();
         renderDashboardCandidates();
         updateMainStats();
         updateDashboardStats();
+        showNotification(`تمت إضافة المرشح: ${name}`);
 
         // مسح الحقول
         document.getElementById('newCandidateName').value = '';
         document.getElementById('newCandidateParty').value = '';
-        
-        showNotification(`تمت إضافة المرشح: ${name}`);
     }
 
     function renderDashboardCandidates() {
         const list = document.getElementById('dashboardCandidatesList');
         list.innerHTML = '';
 
+        candidates.sort((a, b) => b.votes - a.votes);
+        
+        if (candidates.length === 0) {
+            list.innerHTML = '<div class="alert alert-warning"><i class="fas fa-info-circle"></i> لا يوجد مرشحون حالياً.</div>';
+            return;
+        }
+
         candidates.forEach(candidate => {
             const item = document.createElement('div');
-            item.style.background = 'rgba(255, 255, 255, 0.1)';
-            item.style.borderRadius = '10px';
-            item.style.padding = '15px';
-            item.style.marginBottom = '10px';
+            item.className = 'candidate-item fade-in';
             item.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-                    <img src="${candidate.imageUrl}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
-                    <div>
-                        <h4 style="margin: 0; color: white;">${candidate.name}</h4>
-                        <p style="margin: 0; color: #ccc;">${candidate.party} - الأصوات: ${candidate.votes}</p>
+                <div class="candidate-item-content">
+                    <img src="${candidate.imageUrl}" onerror="this.src='https://via.placeholder.com/80/CCCCCC/000000?text=No+Image'" alt="${candidate.name}" class="candidate-preview">
+                    <div class="candidate-details">
+                        <h4 style="color: var(--primary);">${candidate.name} (${candidate.party})</h4>
+                        <p style="color: var(--light);">الأصوات: <strong>${candidate.votes}</strong> | ID: ${candidate.id}</p>
                     </div>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="number" id="votesInput-${candidate.id}" value="${candidate.votes}" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; width: 100px;">
-                    <button onclick="updateCandidateVotes(${candidate.id})" style="padding: 5px 10px; background: var(--info); color: white; border: none; border-radius: 5px; cursor: pointer;">تحديث الأصوات</button>
-                    <button onclick="deleteCandidate(${candidate.id})" style="padding: 5px 10px; background: var(--danger); color: white; border: none; border-radius: 5px; cursor: pointer;">حذف</button>
+                <div class="votes-control">
+                    <input type="number" id="dashboardVotesInput-${candidate.id}" class="form-control vote-input" value="${candidate.votes}" min="0" style="color: var(--dark);">
+                    <button class="update-votes-btn" onclick="updateCandidateVotes(${candidate.id})">
+                        <i class="fas fa-sync-alt"></i> تحديث الأصوات
+                    </button>
+                </div>
+                <div class="candidate-actions">
+                    <button class="btn btn-warning btn-sm" onclick="editCandidate(${candidate.id})"><i class="fas fa-edit"></i> تعديل</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCandidate(${candidate.id})"><i class="fas fa-trash"></i> حذف</button>
                 </div>
             `;
             list.appendChild(item);
         });
     }
-
-    function updateCandidateVotes(id) {
-        const input = document.getElementById(`votesInput-${id}`);
-        const newVotes = parseInt(input.value);
-
-        if (!isNaN(newVotes) && newVotes >= 0) {
-            const candidate = candidates.find(c => c.id === id);
-            if (candidate) {
-                candidate.votes = newVotes;
-                saveCandidates();
-                renderCandidates();
-                updateMainStats();
-                updateDashboardStats();
-                showNotification(`تم تحديث أصوات ${candidate.name}`);
-            }
-        }
-    }
-
+    
     function deleteCandidate(id) {
-        if (confirm("هل أنت متأكد من حذف هذا المرشح؟")) {
+        if (confirm("هل أنت متأكد من حذف هذا المرشح؟ لا يمكن التراجع عن هذا الإجراء.")) {
             candidates = candidates.filter(c => c.id !== id);
-            saveCandidates();
+            saveAllData();
             renderCandidates();
             renderDashboardCandidates();
             updateMainStats();
             updateDashboardStats();
-            showNotification("تم حذف المرشح بنجاح");
+            showNotification("تم حذف المرشح بنجاح.");
         }
     }
 
-    // --- التصويت والواجهة الرئيسية ---
+    function editCandidate(id) {
+        const candidate = candidates.find(c => c.id === id);
+        if (!candidate) return;
+
+        const newName = prompt(`تعديل اسم المرشح الحالي (${candidate.name}):`, candidate.name);
+        if (newName && newName.trim() !== "") {
+            candidate.name = newName.trim();
+        }
+
+        const newParty = prompt(`تعديل حزب المرشح الحالي (${candidate.party}):`, candidate.party);
+        if (newParty && newParty.trim() !== "") {
+            candidate.party = newParty.trim();
+        }
+
+        const newImage = prompt(`تعديل رابط الصورة الحالي (${candidate.imageUrl}):`, candidate.imageUrl);
+        if (newImage && newImage.trim() !== "") {
+            candidate.imageUrl = newImage.trim();
+        }
+        
+        saveAllData();
+        renderCandidates();
+        renderDashboardCandidates();
+        updateMainStats();
+        updateDashboardStats();
+        showNotification("تم تحديث بيانات المرشح بنجاح.");
+    }
+
+    function updateCandidateVotes(id) {
+        const inputElement = document.getElementById(`dashboardVotesInput-${id}`);
+        const newVotes = parseInt(inputElement.value);
+
+        if (isNaN(newVotes) || newVotes < 0) {
+            showNotification("القيمة غير صحيحة.");
+            inputElement.value = candidates.find(c => c.id === id).votes;
+            return;
+        }
+
+        const candidate = candidates.find(c => c.id === id);
+        if (candidate) {
+            candidate.votes = newVotes;
+            saveAllData();
+            renderCandidates();
+            renderDashboardCandidates();
+            updateMainStats();
+            updateDashboardStats();
+            showNotification(`تم تحديث أصوات ${candidate.name} إلى ${newVotes}`);
+        }
+    }
+
+    // --- وظائف التصويت والواجهة الرئيسية ---
     function renderCandidates() {
         const grid = document.getElementById('candidatesGrid');
         grid.innerHTML = '';
+        
+        candidates.sort((a, b) => b.votes - a.votes);
+        
+        if (candidates.length === 0) {
+            grid.innerHTML = '<div class="alert alert-warning"><i class="fas fa-info-circle"></i> لا يوجد مرشحون حالياً. يرجى مراجعة المسؤول.</div>';
+            return;
+        }
 
         candidates.forEach(candidate => {
             const card = document.createElement('div');
-            card.className = 'candidate-card';
+            card.className = 'candidate-card fade-in';
             card.innerHTML = `
-                <img src="${candidate.imageUrl}" class="candidate-image" onerror="this.src='https://via.placeholder.com/140/CCCCCC/000000?text=No+Image'">
+                <img src="${candidate.imageUrl}" onerror="this.src='https://via.placeholder.com/140/CCCCCC/000000?text=No+Image'" alt="${candidate.name}" class="candidate-image">
                 <h3>${candidate.name}</h3>
                 <p>الحزب: <strong>${candidate.party}</strong></p>
-                <p>الأصوات: <strong>${candidate.votes}</strong></p>
-                <button class="vote-btn" onclick="voteForCandidate(${candidate.id})" id="voteBtn-${candidate.id}">
+                <p>الأصوات الحالية: <strong class="vote-count">${candidate.votes}</strong></p>
+                <button class="vote-btn" id="voteBtn-${candidate.id}" onclick="voteForCandidate(${candidate.id})">
                     <i class="fas fa-vote-yea"></i> صوت الآن
                 </button>
             `;
@@ -641,15 +1575,45 @@
         });
         checkVotingStatus();
     }
+    
+    function checkVotingStatus() {
+        const now = new Date();
+        isVotingOpen = now < votingEndTime;
+
+        const timerDisplay = document.getElementById('mainTimerDisplay');
+        const votingMessage = document.getElementById('votingMessage');
+        const voteButtons = document.querySelectorAll('.vote-btn');
+
+        if (isVotingOpen) {
+            timerDisplay.style.color = 'var(--secondary)';
+            votingMessage.innerHTML = '';
+            voteButtons.forEach(btn => {
+                btn.disabled = hasVoted;
+                if (hasVoted) {
+                    btn.textContent = 'تم التصويت بالفعل';
+                } else {
+                    btn.innerHTML = '<i class="fas fa-vote-yea"></i> صوت الآن';
+                }
+            });
+        } else {
+            timerDisplay.textContent = "انتهت فترة التصويت";
+            timerDisplay.style.color = 'var(--danger)';
+            votingMessage.innerHTML = '<div class="alert alert-danger" style="color: #ffcdd2;">انتهت فترة التصويت ولا يمكن الإدلاء بأصوات جديدة.</div>';
+            voteButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.textContent = 'التصويت مغلق';
+            });
+        }
+    }
 
     function voteForCandidate(id) {
         if (!isVotingOpen) {
-            showNotification("التصويت مغلق حالياً");
+            showNotification("التصويت مغلق حالياً.");
             return;
         }
         
         if (hasVoted) {
-            showNotification("لقد قمت بالتصويت بالفعل");
+            showNotification("لقد قمت بالتصويت بالفعل. لا يمكن التصويت مرتين.");
             return;
         }
 
@@ -658,120 +1622,227 @@
             candidate.votes++;
             hasVoted = true;
             localStorage.setItem('userVoted', 'true');
-            saveCandidates();
+            saveAllData();
             renderCandidates();
             updateMainStats();
             updateDashboardStats();
-            showNotification(`شكراً لك! تم التصويت لـ ${candidate.name}`);
+            showNotification(`شكراً لك! تم التصويت لـ ${candidate.name} بنجاح.`);
         }
     }
 
     function updateMainStats() {
         const totalVotes = candidates.reduce((sum, c) => sum + c.votes, 0);
         const leader = candidates.reduce((max, c) => (c.votes > max.votes ? c : max), { votes: -1, name: '--' });
+        const participation = candidates.length > 0 ? (totalVotes * 100 / (candidates.length * 1000)).toFixed(2) : 0;
 
-        document.getElementById('mainTitle').textContent = systemTitle;
+        document.getElementById('mainTitle').innerHTML = `<i class="fas fa-shield-alt"></i> ${systemTitle} <i class="fas fa-poll"></i>`;
         document.title = systemTitle;
         document.getElementById('systemTitle').value = systemTitle;
         
         document.getElementById('mainStatCandidates').textContent = candidates.length;
         document.getElementById('mainStatTotalVotes').textContent = totalVotes;
         document.getElementById('mainStatLeader').textContent = leader.name;
-        document.getElementById('mainStatParticipation').textContent = totalVotes > 0 ? Math.round((totalVotes / (candidates.length * 100)) * 100) + '%' : '0%';
-    }
+        document.getElementById('mainStatParticipation').textContent = `${participation}%`;
 
-    function updateDashboardStats() {
-        const totalVotes = candidates.reduce((sum, c) => sum + c.votes, 0);
-        document.getElementById('dashboardStatCandidates').textContent = candidates.length;
-        document.getElementById('dashboardStatTotalVotes').textContent = totalVotes;
-    }
-
-    // --- إدارة الوقت ---
-    function updateVotingTimeDisplay() {
+        // تحديث العداد التنازلي
         const now = new Date();
         const diff = votingEndTime.getTime() - now.getTime();
         const timerDisplay = document.getElementById('mainTimerDisplay');
-        const currentEndTime = document.getElementById('currentEndTime');
 
         if (diff > 0) {
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            timerDisplay.textContent = `${days} يوم ${hours} ساعة ${minutes} دقيقة متبقية`;
+            timerDisplay.textContent = `${days}ي ${hours}س ${minutes}د ${seconds}ث متبقية`;
             isVotingOpen = true;
         } else {
-            timerDisplay.textContent = "انتهت فترة التصويت";
-            timerDisplay.style.color = 'var(--danger)';
             isVotingOpen = false;
         }
-
-        currentEndTime.textContent = votingEndTime.toLocaleString('ar-EG');
+        checkVotingStatus();
     }
-
-    function extendVotingTime(hours) {
-        votingEndTime.setTime(votingEndTime.getTime() + (hours * 60 * 60 * 1000));
-        saveVotingTime();
-        updateVotingTimeDisplay();
-        showNotification(`تم تمديد فترة التصويت بـ ${hours} ساعة`);
-    }
-
-    function setSpecificEndTime() {
-        const input = document.getElementById('newEndTimeInput').value;
-        if (input) {
-            votingEndTime = new Date(input);
-            saveVotingTime();
-            updateVotingTimeDisplay();
-            showNotification("تم تعيين وقت انتهاء التصويت الجديد");
+    
+    function updateDashboardStats() {
+        const totalVotes = candidates.reduce((sum, c) => sum + c.votes, 0);
+        let leaderName = '--';
+        if (candidates.length > 0) {
+            const leader = candidates.reduce((max, c) => (c.votes > max.votes ? c : max), { votes: -1, name: '--' });
+            leaderName = leader.name;
         }
+
+        document.getElementById('dashboardStatCandidates').textContent = candidates.length;
+        document.getElementById('dashboardStatTotalVotes').textContent = totalVotes;
+        document.getElementById('dashboardStatLeader').textContent = leaderName;
+        document.getElementById('dashboardStatStatus').textContent = isVotingOpen ? 'مفتوح' : 'مغلق';
+        document.getElementById('dashboardStatStatus').style.color = isVotingOpen ? 'var(--secondary)' : 'var(--danger)';
     }
 
-    function checkVotingStatus() {
-        const now = new Date();
-        isVotingOpen = now < votingEndTime;
-        
-        const voteButtons = document.querySelectorAll('.vote-btn');
-        voteButtons.forEach(btn => {
-            if (!isVotingOpen || hasVoted) {
-                btn.disabled = true;
-                if (!isVotingOpen) {
-                    btn.textContent = 'التصويت مغلق';
-                } else if (hasVoted) {
-                    btn.textContent = 'تم التصويت بالفعل';
-                }
-            }
-        });
-    }
-
-    // --- إدارة النظام ---
+    // --- وظائف لوحة التحكم ---
     function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
 
         document.getElementById(`${tabName}-tab`).classList.add('active');
         document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+        
+        if (tabName === 'candidates') {
+            renderDashboardCandidates();
+        }
+        if (tabName === 'time') {
+            updateVotingTimeDisplay();
+        }
     }
 
     function updateSystemTitle() {
         const newTitle = document.getElementById('systemTitle').value;
-        if (newTitle.trim()) {
-            systemTitle = newTitle.trim();
-            saveSystemTitle();
+        if (newTitle.trim() === "") {
+            showNotification("لا يمكن أن يكون العنوان فارغاً.");
+            return;
+        }
+        
+        systemTitle = newTitle.trim();
+        saveAllData();
+        updateMainStats();
+        
+        showNotification("تم تحديث شريط العنوان بنجاح!");
+    }
+
+    // --- وظائف إدارة الوقت ---
+    function updateVotingTimeDisplay() {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        document.getElementById('currentEndTime').textContent = votingEndTime.toLocaleString('ar-EG', options);
+    }
+
+    function extendVotingTime(hours) {
+        if (!isVotingOpen) {
+            votingEndTime = new Date(); // ابدأ من الآن إذا كان مغلقاً
+        }
+        votingEndTime.setTime(votingEndTime.getTime() + (hours * 60 * 60 * 1000));
+        saveAllData();
+        isVotingOpen = true;
+        updateVotingTimeDisplay();
+        updateMainStats();
+        updateDashboardStats();
+        showNotification(`تم تمديد فترة التصويت بـ ${hours} ساعة.`);
+    }
+    
+    function resetVotingTime() {
+        if (confirm("هل أنت متأكد من إعادة تعيين وقت الانتهاء؟ سيتم تعيينه إلى 7 أيام من الآن.")) {
+            votingEndTime = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000));
+            saveAllData();
+            isVotingOpen = true;
+            updateVotingTimeDisplay();
             updateMainStats();
-            showNotification("تم تحديث عنوان النظام بنجاح");
+            updateDashboardStats();
+            showNotification("تمت إعادة تعيين وقت التصويت إلى 7 أيام.");
         }
     }
 
-    // --- التهيئة ---
-    function initApp() {
-        updateMainStats();
-        renderCandidates();
+    function setSpecificEndTime() {
+        const input = document.getElementById('newEndTimeInput').value;
+        const newTime = new Date(input);
+
+        if (isNaN(newTime) || newTime.getTime() < new Date().getTime()) {
+            showNotification("التاريخ والوقت المدخل غير صالح أو في الماضي.");
+            return;
+        }
+
+        votingEndTime = newTime;
+        saveAllData();
+        isVotingOpen = true;
         updateVotingTimeDisplay();
+        updateMainStats();
+        updateDashboardStats();
+        showNotification("تم تعيين وقت انتهاء التصويت الجديد.");
+    }
+    
+    function lockVoting() {
+        votingEndTime = new Date(new Date().getTime() - 1000); // تعيين الوقت إلى الماضي
+        saveAllData();
+        isVotingOpen = false;
+        updateVotingTimeDisplay();
+        updateMainStats();
+        updateDashboardStats();
+        showNotification("تم إغلاق التصويت يدوياً.");
+    }
+
+    function unlockVoting() {
+        votingEndTime = new Date(new Date().getTime() + (1 * 60 * 60 * 1000)); // ساعة من الآن
+        saveAllData();
+        isVotingOpen = true;
+        updateVotingTimeDisplay();
+        updateMainStats();
+        updateDashboardStats();
+        showNotification("تم تفعيل التصويت يدوياً لساعة واحدة.");
+    }
+
+    function resetAllVotes() {
+        if (confirm("تحذير: هل أنت متأكد من تصفير جميع الأصوات لجميع المرشحين؟ لا يمكن التراجع عن هذا الإجراء.")) {
+            candidates.forEach(c => c.votes = 0);
+            hasVoted = false;
+            localStorage.removeItem('userVoted');
+            saveAllData();
+            renderCandidates();
+            renderDashboardCandidates();
+            updateMainStats();
+            updateDashboardStats();
+            showNotification("تم تصفير جميع الأصوات بنجاح. العملية بدأت من جديد.");
+        }
+    }
+
+    function exportData() {
+        const data = {
+            SystemTitle: systemTitle,
+            VotingEndTime: votingEndTime.toISOString(),
+            Candidates: candidates
+        };
         
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "election_data.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+        showNotification("تم تصدير البيانات بنجاح كملف JSON.");
+    }
+
+    // --- نظام الجسيمات العائمة ---
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.animationDelay = `-${Math.random() * 10}s`;
+        particle.style.animationDuration = `${10 + Math.random() * 10}s`;
+        document.getElementById('particlesContainer').appendChild(particle);
+    }
+    
+    // --- وظيفة التهيئة الرئيسية ---
+    function initApp() {
+        document.getElementById('mainContent').style.display = 'block'; 
+        renderCandidates();
+        updateMainStats();
+        
+        // تحديث كل 1 ثانية للعد التنازلي
         setInterval(() => {
-            updateVotingTimeDisplay();
-            checkVotingStatus();
-        }, 60000); // تحديث كل دقيقة
+            updateMainStats();
+        }, 1000); 
+
+        // التزامن التلقائي كل 3 ثواني
+        setInterval(loadAllData, 3000);
+
+        // إنشاء الجسيمات
+        for (let i = 0; i < 20; i++) {
+            createParticle();
+        }
+        
+        // تحديث إحصائيات لوحة التحكم كل 5 ثوانٍ إذا كانت مفتوحة
+        setInterval(() => {
+            if (document.getElementById('dashboard').style.display === 'block') {
+                updateDashboardStats();
+            }
+        }, 5000); 
     }
 
     document.addEventListener('DOMContentLoaded', initApp);
